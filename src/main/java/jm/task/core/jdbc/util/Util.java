@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class Util {
     private static final String URL = "jdbc:mysql://localhost:3306/first_schema_on_local_instance";
     private static final String USER = "root";
-    private static final String PASS = "Sql23snow23sqL";
+    private static final String PASS = "root";
     private volatile static Connection connection;
     public static Connection getConnection() {
         if (connection == null) {
@@ -95,8 +95,7 @@ public class CustomConnectionPool implements AutoCloseable {
         }
 
     }
-}*/
-/**
+
  * Return connection to connection pool.
     Прокси делается отдельным классом пакетной видимости и лежит рядом с утилкой
  (нашим пулом коннекшенов) сделано для того чтобы остальные классы даже не могли им
