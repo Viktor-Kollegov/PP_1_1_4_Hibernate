@@ -17,10 +17,10 @@ public class Util {
     private static final String USER = "root";
     private static final String PASS = "root";
     private volatile static Connection connection;
+    private volatile static SessionFactory factory;
+    private static final Properties properties = new Properties();
 
-    public static Session getSession() {
-        SessionFactory factory;
-        Properties properties = new Properties();
+    static {
         properties.put(Environment.DRIVER, DRIVER);
         properties.put(Environment.URL, URL);
         properties.put(Environment.USER, USER);
@@ -30,10 +30,15 @@ public class Util {
         properties.put(Environment.AUTOCOMMIT, "false");
         properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
         properties.put(Environment.HBM2DDL_AUTO, "none");
-        factory = new Configuration()
-                .addAnnotatedClass(User.class)
-                .setProperties(properties)
-                .buildSessionFactory();
+    }
+
+    public static Session getSession() {
+        if (factory == null) {
+            factory = new Configuration()
+                    .addAnnotatedClass(User.class)
+                    .setProperties(properties)
+                    .buildSessionFactory();
+        }
         return factory.openSession();
     }
 

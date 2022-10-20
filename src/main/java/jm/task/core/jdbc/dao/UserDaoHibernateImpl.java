@@ -6,20 +6,22 @@ import org.hibernate.HibernateError;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class UserDaoHibernateImpl extends Util implements UserDao {
     public UserDaoHibernateImpl() {
     }
-
+    Transaction transaction = null;
     @Override
     public void createUsersTable() {
-        Transaction transaction = null;
         try (Session session = getSession()) {
             session.beginTransaction();
             session.createSQLQuery("create table if not exists users " +
                     "(id integer not null auto_increment primary key, name varchar(15), " +
-                    "lastName varchar(25), age integer)").addEntity(User.class).executeUpdate();
+                    "lastName varchar(25), age integer)")
+                    .addEntity(User.class)
+                    .executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateError e) {
             transaction.rollback();
@@ -29,10 +31,10 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Transaction transaction = null;
         try (Session session = getSession()) {
             session.beginTransaction();
-            session.createSQLQuery("drop table if exists users").executeUpdate();
+            session.createSQLQuery("drop table if exists users")
+                    .executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateError e) {
             transaction.rollback();
@@ -42,7 +44,6 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Transaction transaction = null;
         try (Session session = getSession()) {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
@@ -56,10 +57,11 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Transaction transaction = null;
         try (Session session = getSession()) {
             session.beginTransaction();
-            session.createQuery("delete User where id = :id").setParameter("id", id).executeUpdate();
+            session.createQuery("delete User where id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateError e) {
             transaction.rollback();
@@ -69,10 +71,10 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Transaction transaction = null;
         try (Session session = getSession()) {
             session.beginTransaction();
-            List<User> userList = session.createQuery("from User").getResultList();
+            TypedQuery<User> query = session.createQuery("from User", User.class);
+            List<User> userList = query.getResultList();
             session.getTransaction().commit();
             return userList;
         } catch (HibernateError e) {
@@ -84,10 +86,10 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
 
     @Override
     public void cleanUsersTable() {
-        Transaction transaction = null;
         try (Session session = getSession()) {
             session.beginTransaction();
-            session.createQuery("delete User").executeUpdate();
+            session.createQuery("delete User")
+                    .executeUpdate();
             session.getTransaction().commit();
         } catch (HibernateError e) {
             transaction.rollback();
