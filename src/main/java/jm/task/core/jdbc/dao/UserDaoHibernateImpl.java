@@ -12,17 +12,18 @@ import java.util.List;
 public class UserDaoHibernateImpl extends Util implements UserDao {
     public UserDaoHibernateImpl() {
     }
-    Transaction transaction = null;
+    Transaction transaction;
     @Override
     public void createUsersTable() {
         try (Session session = getSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createSQLQuery("create table if not exists users " +
                     "(id integer not null auto_increment primary key, name varchar(15), " +
                     "lastName varchar(25), age integer)")
                     .addEntity(User.class)
                     .executeUpdate();
-            session.getTransaction().commit();
+            session.getTransaction()
+                    .commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
@@ -32,10 +33,11 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
     @Override
     public void dropUsersTable() {
         try (Session session = getSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createSQLQuery("drop table if exists users")
                     .executeUpdate();
-            session.getTransaction().commit();
+            session.getTransaction()
+                    .commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
@@ -47,7 +49,8 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
         try (Session session = getSession()) {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
-            session.getTransaction().commit();
+            session.getTransaction()
+                    .commit();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (HibernateError e) {
             transaction.rollback();
@@ -58,11 +61,12 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
     @Override
     public void removeUserById(long id) {
         try (Session session = getSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createQuery("delete User where id = :id")
                     .setParameter("id", id)
                     .executeUpdate();
-            session.getTransaction().commit();
+            session.getTransaction()
+                    .commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
@@ -72,10 +76,11 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
     @Override
     public List<User> getAllUsers() {
         try (Session session = getSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             TypedQuery<User> query = session.createQuery("from User", User.class);
             List<User> userList = query.getResultList();
-            session.getTransaction().commit();
+            session.getTransaction()
+                    .commit();
             return userList;
         } catch (HibernateError e) {
             transaction.rollback();
@@ -87,10 +92,11 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
     @Override
     public void cleanUsersTable() {
         try (Session session = getSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.createQuery("delete User")
                     .executeUpdate();
-            session.getTransaction().commit();
+            session.getTransaction()
+                    .commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
