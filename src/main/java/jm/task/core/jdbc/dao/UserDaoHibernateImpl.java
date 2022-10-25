@@ -20,10 +20,9 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
             session.createSQLQuery("create table if not exists users " +
                     "(id integer not null auto_increment primary key, name varchar(15), " +
                     "lastName varchar(25), age integer)")
-                    .addEntity(User.class)
+                    //.addEntity(User.class)
                     .executeUpdate();
-            session.getTransaction()
-                    .commit();
+            transaction.commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
@@ -36,8 +35,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
             transaction = session.beginTransaction();
             session.createSQLQuery("drop table if exists users")
                     .executeUpdate();
-            session.getTransaction()
-                    .commit();
+            transaction.commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
@@ -49,8 +47,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
         try (Session session = getSession()) {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
-            session.getTransaction()
-                    .commit();
+            transaction.commit();
             System.out.println("User с именем – " + name + " добавлен в базу данных");
         } catch (HibernateError e) {
             transaction.rollback();
@@ -65,8 +62,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
             session.createQuery("delete User where id = :id")
                     .setParameter("id", id)
                     .executeUpdate();
-            session.getTransaction()
-                    .commit();
+            transaction.commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();
@@ -79,8 +75,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
             transaction = session.beginTransaction();
             TypedQuery<User> query = session.createQuery("from User", User.class);
             List<User> userList = query.getResultList();
-            session.getTransaction()
-                    .commit();
+            transaction.commit();
             return userList;
         } catch (HibernateError e) {
             transaction.rollback();
@@ -95,8 +90,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
             transaction = session.beginTransaction();
             session.createQuery("delete User")
                     .executeUpdate();
-            session.getTransaction()
-                    .commit();
+            transaction.commit();
         } catch (HibernateError e) {
             transaction.rollback();
             e.printStackTrace();

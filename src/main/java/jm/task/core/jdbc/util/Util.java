@@ -14,8 +14,8 @@ import java.util.Properties;
 public class Util {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String URL = "jdbc:mysql://localhost:3306/first_schema_on_local_instance?useSSL=false&serverTimezone=UTC";
-    private static final String USER = "root";
-    private static final String PASS = "root";
+    private static final String USER = "bestuser";
+    private static final String PASS = "rootrootroot";
     private volatile static Connection connection;
     private volatile static SessionFactory factory;
     private static final Properties properties = new Properties();
