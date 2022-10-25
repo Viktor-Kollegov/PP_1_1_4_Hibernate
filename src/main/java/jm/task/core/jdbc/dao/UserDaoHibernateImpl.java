@@ -20,7 +20,7 @@ public class UserDaoHibernateImpl extends Util implements UserDao {
             session.createSQLQuery("create table if not exists users " +
                     "(id integer not null auto_increment primary key, name varchar(15), " +
                     "lastName varchar(25), age integer)")
-                    //.addEntity(User.class)
+                    .addEntity(User.class)
                     .executeUpdate();
             transaction.commit();
         } catch (HibernateError e) {
