@@ -2,6 +2,7 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
+import jm.task.core.jdbc.util.Util;
 
 public class Main {
     public static void main(String[] args) {
@@ -12,8 +13,9 @@ public class Main {
         userService.saveUser("Name3", "LastName3", (byte) 31);
         userService.saveUser("Name4", "LastName4", (byte) 38);
         System.out.println(userService.getAllUsers());
-        userService.cleanUsersTable();
-        userService.dropUsersTable();
+        Util.getFactory().close();
+        //userService.cleanUsersTable();
+        //userService.dropUsersTable();
     }
 }
 /**

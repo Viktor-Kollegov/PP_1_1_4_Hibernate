@@ -42,6 +42,10 @@ public class Util {
         return factory.openSession();
     }
 
+    public static SessionFactory getFactory() {
+        return factory;
+    }
+
     public static Connection getConnection() {
         if (connection == null) {
             synchronized (Connection.class) {
